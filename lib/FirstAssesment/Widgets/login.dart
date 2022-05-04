@@ -1,6 +1,8 @@
+import 'package:assessment/ApiManager/api_manager.dart';
 import 'package:assessment/utilities/basic_utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart';
 
 class LoginWidget extends StatefulWidget {
   const LoginWidget({Key? key}) : super(key: key);
@@ -10,12 +12,21 @@ class LoginWidget extends StatefulWidget {
 }
 
 class _LoginWidgetState extends State<LoginWidget> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   bool _passwordNotVisible = true;
-  String _email = "";
-  String _password = "";
+  String email = "";
+  String password = "";
+
+  login() {
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+      ApiManager().login(email, password, context);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
     return Padding(
       padding: const EdgeInsets.fromLTRB(25, 50, 25, 35),
       child: Form(
@@ -33,13 +44,12 @@ class _LoginWidgetState extends State<LoginWidget> {
               TextFormField(
                 decoration: BasicUtilities().textInputTheme("Email"),
                 validator: (txt) => BasicUtilities().emailValidate(txt!),
-                onSaved: (txt) => _email = txt!,
+                onSaved: (txt) => email = txt!,
               ),
               const SizedBox(
                 height: 20,
               ),
               TextFormField(
-                validator: (txt) => BasicUtilities().passwordValidate(txt!),
                 enableSuggestions: false,
                 autocorrect: false,
                 decoration: InputDecoration(
@@ -59,7 +69,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                 ),
                 obscureText: _passwordNotVisible,
                 onSaved: (tx) {
-                  _password = tx!;
+                  password = tx!;
                 },
               ),
               const SizedBox(
@@ -76,7 +86,7 @@ class _LoginWidgetState extends State<LoginWidget> {
               const SizedBox(
                 height: 30,
               ),
-              BasicUtilities().styleRoundedButton("Login", () {}),
+              ElevatedButton(onPressed: login, child: const Text("Login")),
             ],
           )),
     );

@@ -1,3 +1,4 @@
+import 'package:assessment/ApiManager/api_manager.dart';
 import 'package:assessment/utilities/basic_utilities.dart';
 
 import 'package:flutter/material.dart';
@@ -12,85 +13,67 @@ class RegisterWidget extends StatefulWidget {
 
 class _RegisterWidgetState extends State<RegisterWidget> {
   bool _passwordNotVisible = true;
-  String _email = "";
-  String _username = "";
-  String _phone = "";
-  String _password = "";
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  String email = "";
+
+  String password = "";
+  register() {
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+      ApiManager().register(email, password, context);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
     return Padding(
       padding: const EdgeInsets.fromLTRB(25, 50, 25, 35),
       child: Form(
           key: _formKey,
-          child: Column(
-            children: [
-              Text(
-                "Register",
-                style: GoogleFonts.rubik(
-                    fontWeight: FontWeight.w500, fontSize: 25),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              TextFormField(
-                decoration: BasicUtilities().textInputTheme("Email"),
-                validator: (txt) => BasicUtilities().emailValidate(txt!),
-                onSaved: (txt) => _email = txt!,
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              TextFormField(
-                decoration: BasicUtilities().textInputTheme("Username"),
-                validator: (username) =>
-                    BasicUtilities().usernameValidate(username!),
-                onSaved: (txt) => _username = txt!,
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              TextFormField(
-                decoration: BasicUtilities().textInputTheme("Phone"),
-                validator: (phone) => BasicUtilities().phoneValidate(phone!),
-                keyboardType: TextInputType.number,
-                onSaved: (txt) => _phone = txt!,
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: 'Password',
-                  hintText: 'Enter your password',
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      _passwordNotVisible
-                          ? Icons.visibility_off
-                          : Icons.visibility,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        _passwordNotVisible = !_passwordNotVisible;
-                      });
-                    },
+          child: Column(children: [
+            Text(
+              "Register",
+              style:
+                  GoogleFonts.rubik(fontWeight: FontWeight.w500, fontSize: 25),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            TextFormField(
+              decoration: BasicUtilities().textInputTheme("Email"),
+              validator: (txt) => BasicUtilities().emailValidate(txt!),
+              onSaved: (txt) => email = txt!,
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            TextFormField(
+              decoration: InputDecoration(
+                labelText: 'Password',
+                hintText: 'Enter your password',
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    _passwordNotVisible
+                        ? Icons.visibility_off
+                        : Icons.visibility,
                   ),
+                  onPressed: () {
+                    setState(() {
+                      _passwordNotVisible = !_passwordNotVisible;
+                    });
+                  },
                 ),
-                validator: (password) =>
-                    BasicUtilities().passwordValidate(password!),
-                obscureText: _passwordNotVisible,
-                enableSuggestions: false,
-                autocorrect: false,
-                onSaved: (txt) => _password = txt!,
               ),
-              const SizedBox(
-                height: 25,
-              ),
-              BasicUtilities().styleRoundedButton("Register", () => null),
-            ],
-          )),
+              obscureText: _passwordNotVisible,
+              enableSuggestions: false,
+              autocorrect: false,
+              onSaved: (txt) => password = txt!,
+            ),
+            const SizedBox(
+              height: 25,
+            ),
+            ElevatedButton(onPressed: register, child: const Text("Register")),
+          ])),
     );
   }
 }

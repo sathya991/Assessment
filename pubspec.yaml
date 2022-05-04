@@ -38,6 +38,8 @@ dependencies:
   google_fonts: ^2.3.2
   fl_chart: ^0.50.1
   sizer: ^2.0.15
+  http: ^0.13.4
+  hexcolor: ^2.0.7
 
 dev_dependencies:
   flutter_test:

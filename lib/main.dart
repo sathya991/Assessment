@@ -1,3 +1,4 @@
+import 'package:assessment/FirstAssesment/Screens/list_display.dart';
 import 'package:assessment/FirstAssesment/Screens/login_register.dart';
 import 'package:assessment/SecondScreen/Screens/dashboard.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +22,9 @@ class MyApp extends StatelessWidget {
           backgroundColor: Colors.grey[200],
         ),
         home: const LoginNRegisterScreen(),
+        routes: {
+          ListDisplay.listDisplayRoute: (context) => const ListDisplay()
+        },
       );
     });
   }
